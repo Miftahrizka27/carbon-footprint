@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "carbon-footprint-production-9c64.up.railway.app";
 
 let hasilCarbon = null;
 let namaUser = null;
