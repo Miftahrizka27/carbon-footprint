@@ -9,6 +9,14 @@ from typing import List, Optional
 from backend.calculator import hitung_carbon, konversi_metafora, cek_level
 from backend.chatbot import get_saran, chat_lanjutan
 from fastapi.responses import FileResponse
+from fastapi import UploadFile, File
+import pdfplumber
+from PIL import Image
+import pytesseract
+import io
+import json
+import tempfile
+import os
 
 app = FastAPI()
 
@@ -70,6 +78,42 @@ def chat(data: ChatRequest):
                for m in data.riwayat_chat]
     balasan = chat_lanjutan(data.nama, data.hasil_carbon, riwayat)
     return {"balasan": balasan}
+
+# Route upload tagihan
+@app.post("/upload-tagihan")
+async def upload_tagihan(file: UploadFile = File(...)):
+    teks = ""
+    
+    konten = await file.read()
+    
+    if file.content_type == "application/pdf":
+        with pdfplumber.open(io.BytesIO(konten)) as pdf:
+            for page in pdf.pages:
+                teks += page.extract_text() or ""
+    
+    elif file.content_type in ["image/jpeg", "image/png", "image/jpg"]:
+        img = Image.open(io.BytesIO(konten))
+        teks = pytesseract.image_to_string(img, lang="ind+eng")
+    
+    else:
+        return {"error": "Format tidak didukung. Gunakan PDF atau gambar."}
+    
+    if not teks.strip():
+        return {"error": "Tidak bisa membaca teks dari file."}
+    
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
+        f.write(teks)
+        tmp_path = f.name
+    
+    hasil_ai = analisis_tagihan(teks)
+    os.unlink(tmp_path)
+    
+    try:
+        hasil = json.loads(hasil_ai)
+    except:
+        hasil = {"raw": hasil_ai}
+    
+    return {"teks": teks, "analisis": hasil}
 
 # Route cek server
 @app.get("/")
