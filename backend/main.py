@@ -90,14 +90,12 @@ def chat(data: ChatRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 # ============ ROUTE UPLOAD TAGIHAN ============
+#ROUTE UPLOAD TAGIHAN
 @app.post("/upload-tagihan")
 async def upload_tagihan(file: UploadFile = File(...)):
-    """Upload tagihan (PDF/Gambar) dan analisis"""
-    teks = ""
-    tmp_path = None
-    
     try:
         konten = await file.read()
+        print(f"File received: {file.filename}, type: {file.content_type}")
         
         if file.content_type == "application/pdf":
             with pdfplumber.open(io.BytesIO(konten)) as pdf:
@@ -105,8 +103,19 @@ async def upload_tagihan(file: UploadFile = File(...)):
                     teks += page.extract_text() or ""
         
         elif file.content_type in ["image/jpeg", "image/png", "image/jpg"]:
-            img = Image.open(io.BytesIO(konten))
-            teks = pytesseract.image_to_string(img, lang="ind+eng")
+            b64 = base64.b64encode(konten).decode("utf-8")
+            response = client.chat.completions.create(
+                model="llama-3.2-11b-vision-preview",
+                max_tokens=500,
+                messages=[{
+                    "role": "user",
+                    "content": [
+                         {"type": "image_url", "image_url": {"url": f"data:{file.content_type};base64,{b64}"}},
+                         {"type": "text", "text": 'Analisis tagihan ini, ekstrak dalam JSON: {"kategori": "listrik/air/transportasi/sampah/lainnya", "nilai": angka, "deskripsi": "...", "confidence": "tinggi/sedang/rendah"}. Balas HANYA JSON.'}
+                    ]
+                }]
+            )
+            hasil_ai = response.choices[0].message.content
         
         else:
             raise HTTPException(
@@ -125,15 +134,12 @@ async def upload_tagihan(file: UploadFile = File(...)):
         
         # Parse JSON
         try:
-            hasil = json.loads(hasil_ai)
-        except json.JSONDecodeError:
-            hasil = {"raw_text": hasil_ai}
-        
-        return {
-            "status": "success",
-            "teks_ekstrak": teks,
-            "analisis": hasil
-        }
+        hasil = json.loads(hasil_ai)
+    except Exception as e:
+        print(f"JSON parse error: {e}, raw: {hasil_ai}")
+        hasil = {"raw": hasil_ai}
+
+    return {"analisis": hasil}
     
     except HTTPException:
         raise
