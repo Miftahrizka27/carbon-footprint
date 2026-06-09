@@ -6,3 +6,5 @@ pydantic
 pdfplumber
 Pillow
 pytesseract
+cloudinary
+python-multipart
