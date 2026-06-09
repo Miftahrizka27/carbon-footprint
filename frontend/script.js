@@ -4,6 +4,64 @@ let hasilCarbon = null;
 let namaUser = null;
 let riwayatChat = [];
 
+let hasilAnalisis = null;
+
+async function uploadTagihan(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  document.getElementById("upload-label").textContent = "Menganalisis...";
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const response = await fetch(`${API_URL}/upload-tagihan`, {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await response.json();
+
+    if (data.error) {
+      alert(data.error);
+      document.getElementById("upload-label").textContent = "Upload tagihan (PDF/Gambar)";
+      return;
+    }
+
+    hasilAnalisis = data.analisis;
+    document.getElementById("modal-deskripsi").textContent = data.analisis.deskripsi || "-";
+    document.getElementById("modal-kategori").textContent = data.analisis.kategori || "-";
+    document.getElementById("modal-nilai").textContent = data.analisis.nilai || "-";
+    document.getElementById("modal-confidence").textContent = data.analisis.confidence || "-";
+    document.getElementById("modal-overlay").style.display = "flex";
+    document.getElementById("upload-label").textContent = file.name;
+
+  } catch (error) {
+    alert("Gagal upload file. Pastikan backend sudah jalan!");
+    document.getElementById("upload-label").textContent = "Upload tagihan (PDF/Gambar)";
+  }
+}
+
+function konfirmasiTagihan() {
+  if (!hasilAnalisis) return;
+
+  const kategori = hasilAnalisis.kategori;
+  const nilai = hasilAnalisis.nilai;
+
+  if (kategori === "listrik") document.getElementById("listrik").value = nilai;
+  else if (kategori === "air") document.getElementById("air").value = nilai;
+  else if (kategori === "transportasi") document.getElementById("transportasi").value = nilai;
+  else if (kategori === "sampah") document.getElementById("sampah").value = nilai;
+
+  tutupModal();
+}
+
+function tutupModal() {
+  document.getElementById("modal-overlay").style.display = "none";
+  hasilAnalisis = null;
+}
+
 async function hitungCarbon() {
     const nama = document.getElementById("nama").value;
     const listrik = document.getElementById("listrik").value;
