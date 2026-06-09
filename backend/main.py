@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from typing import List, Optional
 from backend.calculator import hitung_carbon, konversi_metafora, cek_level
-from backend.chatbot import get_saran, chat_lanjutan, analysis_tagihan
+from backend.chatbot import get_saran, chat_lanjutan, analisis_tagihan
 from fastapi.responses import FileResponse
 from fastapi import UploadFile, File
 import pdfplumber
