@@ -467,3 +467,22 @@ body {
   color: #4a7a5a;
   font-size: 12px;
 }
+
+.btn-reset {
+  border: none;
+  border-radius: 50px;
+  padding: 13px;
+  width: 100%;
+  background: rgba(10, 20, 15, 0.72);
+  border: 1px solid rgba(120, 180, 140, 0.2);
+  color: #88aa99;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.btn-reset:hover {
+  border-color: rgba(120, 180, 140, 0.45);
+  color: #c8e8d4;
+}
