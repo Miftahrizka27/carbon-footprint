@@ -57,7 +57,7 @@ def cek_potensi_hemat(listrik_kwh, air_liter, transportasi_km, sampah_kg):
     if model is not None:
         fitur = [[listrik_kwh, air_liter, transportasi_km, sampah_kg]]
         prediksi = model.predict(fitur)[0]
-        return round(prediksi, 2)
+        return round(float(prediksi), 2)
     return 0.0
 
 def cek_level(total_co2): # dari DEN 2022
