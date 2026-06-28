@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carbon Footprint - Hasil</title>
+  <link rel="stylesheet" href="/frontend/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="bg-scene">
+    <svg width="100%" height="100%" viewBox="0 0 680 620" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#4a6e8a"/>
+          <stop offset="40%" stop-color="#5d8aaa"/>
+          <stop offset="75%" stop-color="#3d6070"/>
+          <stop offset="100%" stop-color="#1a2e20"/>
+        </linearGradient>
+        <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1a3020"/>
+          <stop offset="100%" stop-color="#0d1a0f"/>
+        </linearGradient>
+        <linearGradient id="redglow" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#c03020" stop-opacity="0.5"/>
+          <stop offset="100%" stop-color="#c03020" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <rect width="680" height="620" fill="url(#sky)"/>
+      <circle cx="90" cy="90" r="1.5" fill="#d8d0c0" opacity="0.5"/>
+      <circle cx="340" cy="40" r="2" fill="#d8d0c0" opacity="0.5"/>
+      <circle cx="580" cy="55" r="1" fill="#d8d0c0" opacity="0.5"/>
+      <rect x="0" y="410" width="680" height="210" fill="url(#ground)"/>
+      <ellipse cx="340" cy="415" rx="310" ry="25" fill="url(#redglow)"/>
+      <rect x="73" y="350" width="14" height="200" fill="#1a2a18"/>
+      <ellipse cx="80" cy="270" rx="55" ry="90" fill="#1e3d22"/>
+      <ellipse cx="55" cy="310" rx="35" ry="65" fill="#1e3d22"/>
+      <ellipse cx="105" cy="310" rx="35" ry="65" fill="#1e3d22"/>
+      <ellipse cx="80" cy="240" rx="40" ry="70" fill="#243f28"/>
+      <rect x="593" y="330" width="16" height="220" fill="#1a2a18"/>
+      <ellipse cx="601" cy="240" rx="62" ry="100" fill="#1e3d22"/>
+      <ellipse cx="572" cy="285" rx="40" ry="72" fill="#1e3d22"/>
+      <ellipse cx="630" cy="285" rx="40" ry="72" fill="#1e3d22"/>
+      <ellipse cx="601" cy="210" rx="45" ry="78" fill="#243f28"/>
+    </svg>
+  </div>
+
+  <div class="result-page">
+    <div class="result-header">
+      <h1>🌿 Carbon Footprint</h1>
+      <p>Hasil perhitungan bulan ini</p>
+    </div>
+
+    <div class="card">
+      <div class="result-main">
+        <div class="greeting" id="salam-nama"></div>
+        <div class="co2-number" id="total-co2">0</div>
+        <div class="co2-unit">kg CO₂ bulan ini</div>
+        <div class="level-badge" id="level-badge"></div>
+
+        <div class="potensi-hemat" id="potensi-hemat">
+          <div class="potensi-label">Potensi Hemat :</div>
+          <div class="potensi-value" id="potensi-value"></div>
+          <div class="potensi-desc" id="potensi-desc"></div>
+        </div>
+      </div>
+      <div class="metaphor-row">
+        <div class="metaphor-item">
+          <span class="m-icon">🌳</span>
+          <div class="m-val" id="jumlah-pohon"></div>
+          <div class="m-lbl">setara pohon dewasa</div>
+        </div>
+        <div class="metaphor-item">
+          <span class="m-icon">💰</span>
+          <div class="m-val" id="biaya-rupiah"></div>
+          <div class="m-lbl">estimasi biaya karbon</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📊 Breakdown emisi per kategori</div>
+      <div class="pie-area">
+        <canvas id="chart-pie" width="110" height="110"></canvas>
+        <div class="pie-legend" id="pie-legend"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📈 Kamu vs rata-rata Indonesia</div>
+      <canvas id="chart-bar"></canvas>
+    </div>
+
+    <div class="card" id="saran-card" style="display:none">
+      <div class="card-title">🤖 Saran dari EcoBot</div>
+      <div class="saran-box">
+        <span class="saran-tag">AI generated</span>
+        <div id="saran-content"></div>
+      </div>
+    </div>
+
+    <div class="card" id="chatbot-card" style="display:none">
+      <div class="card-title">💬 Tanya EcoBot</div>
+      <div class="chat-messages" id="chat-messages"></div>
+      <div class="chat-input-row">
+        <input type="text" id="chat-input" placeholder="Tanya sesuatu ke EcoBot..."/>
+        <button class="send-btn" onclick="kirimChat()">
+          <i class="ti ti-send"></i>
+        </button>
+      </div>
+    </div>
+
+    <button class="back-btn" onclick="window.location.href='/frontend/index.html'">
+      ← Hitung Ulang
+    </button>
+  </div>
+
+  <script src="/frontend/script.js"></script>
+</body>
+</html>
