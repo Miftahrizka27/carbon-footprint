@@ -6,3 +6,6 @@ pydantic
 pdfplumber
 cloudinary
 python-multipart
+scikit-learn
+pandas
+numpy
