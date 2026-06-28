@@ -102,8 +102,8 @@ async function hitungCarbon() {
         });
 
         const data = await response.json();
-        localStorage.setItem("hasilCarbon", JSON.stringify(data));
-        window.location.href = "/frontend/result.html";
+        const encoded = encodeURIComponent(JSON.stringify(data));
+        window.location.href = `/frontend/result.html?data=${encoded}`;
 
     } catch (error) {
         alert("Gagal konek ke server. Pastikan backend sudah jalan! 🔧");
@@ -111,7 +111,8 @@ async function hitungCarbon() {
 }
 
 function tampilkanHasil() {
-    const data = JSON.parse(localStorage.getItem("hasilCarbon"));
+    const params = new URLSearchParams(window.location.search);
+    const data = JSON.parse(decodeURIComponent(params.get("data")));
     if (!data) return;
 
     hasilCarbon = data.hasil;
