@@ -15,6 +15,7 @@ import io
 import json
 import base64
 from backend.chatbot import client
+from backend.calculator import hitung_carbon, konversi_metafora, cek_level, cek_potensi_hemat
 
 app = FastAPI()
 
