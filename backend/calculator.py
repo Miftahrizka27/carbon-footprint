@@ -53,12 +53,8 @@ def konversi_metafora(total_co2):
 
 
 def cek_potensi_hemat(listrik_kwh, air_liter, transportasi_km, sampah_kg):
-    model = _load_model()
-    if model is not None:
-        fitur = [[listrik_kwh, air_liter, transportasi_km, sampah_kg]]
-        prediksi = model.predict(fitur)[0]
-        return round(float(prediksi), 2)
-    return 0.0
+    total = hitung_carbon(listrik_kwh, air_liter, transportasi_km, sampah_kg)["total"]
+    return round(total * 0.15, 2)
 
 def cek_level(total_co2): # dari DEN 2022
     if total_co2 < 150:
